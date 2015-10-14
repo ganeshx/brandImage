@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
+  <link rel="stylesheet" href="./static/lib/css/keen-dashboards.css">
+  <link rel="stylesheet" href="./static/lib/css/dc.css">
+  <link rel="stylesheet" href="./static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="d3.slider.css" media="screen" />
+    <script src="./static/lib/js/jquery.min.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="d3.v3.min.js"></script>
+<script src="d3.slider.js"></script>
+<script src="d3.layout.cloud.js"></script>
+
+
+<style>
+.link {
+    fill:none;
+    stroke: #DDD;
+    stroke-width:1px;
+}
+</style>
+
+
+</head>
+<body class="application">
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./">Dashboard</a>
+      </div>
+    </div>
+  </div>
+  
+ 
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="col-sm-3">
+        <div class="row">
+		
+
+          <!-- Time Chart --> 
+            <div class="chart-wrapper">
+              <div class="chart-title">
+                Overview
+              </div>
+              <div class="chart-stage">
+                <div id="time-chart">
+				<script>
+var width = 400,
+    height = 500;
+var x = d3.scale.linear()
+    .domain([0, 1])
+    .range([0, width]);
+var y = d3.scale.linear()
+    .domain([0, 1])
+    .range([height, 0]);
+var zoom = d3.behavior.zoom()
+    .x(x)
+    .y(y)
+    .scaleExtent([0.5, 5])
+    .on("zoom", zoomed);
+var color = d3.scale.category10();
+var link = d3.svg.line()
+     .x(function(d) { return x(d.x); })
+     .y(function(d) { return y(d.y); })
+     .interpolate("linear");
+/* ************ Constellation ************ */
+var Constellation = function(id, x, y) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+    this.dimension = Math.random()*0.4 + 0.1;
+    this.stars = [];
+    this.createStars(1);
+}
+Constellation.prototype.createStars = function(number) {
+    for (var i=0; i<number; i++) {
+        var xPos = this.x + Math.random()*this.dimension - this.dimension / 2;
+        var yPos = this.y + Math.random()*this.dimension - this.dimension / 2;
+        this.stars.push(new Star(this, i, xPos, yPos));
+    }
+}
+/* ************ Star ************ */
+var Star = function(parent, id, x, y) {
+    this.parent = parent;
+    this.id = id;
+    this.x = x || 0;
+    this.y = y || 0;
+}
+/* ************ SVG ************ */    
+var svg = d3.select("#time-chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .call(zoom);
+    
+var constellations = [];
+for (var i = 0; i<6; i++) {
+    constellations.push( new Constellation(i, Math.random()*0.5+0.25,Math.random()*0.5+0.25) );
+}
+var constellationContainer = svg.selectAll("constellations")
+    .data(constellations)
+  .enter().append("g");
+
+var c = constellationContainer.append("circle")
+    .attr("r", 8)
+    .attr("transform", transform )
+    .style("fill", function(d) { return color(d.id); });
+var s = constellationContainer.selectAll("star")
+    .data(function(d) { return d.stars; })
+  .enter().append("circle")
+    .attr("class", "star")
+    .attr("r", 3 )
+    .attr("transform", transform)
+    .style("fill", function(d) { return color(d.parent.id); });
+function zoomed() {
+    c.attr("transform", transform);
+    s.attr("transform", transform);
+    l.attr("d", function(d) { return link(d.stars); } )
+}
+function transform(d) {
+    return "translate(" + x(d.x) + "," + y(d.y) + ")";
+}
+</script>
+              </div>
+            </div>
+          </div>
+          <!-- Time Chart --> 
+
+        
+
+        </div>
+      </div>
+
+      <!-- Map -->  
+      <div class="col-sm-9">
+        <div class="chart-wrapper">
+		 <ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">General</a></li>
+  <li><a data-toggle="tab" href="#menu1">Emotional</a></li>
+  <li><a data-toggle="tab" href="#menu2">Social</a></li>
+</ul>
+      
+          <div class="chart-stage">
+            <div id="us-chart">
+			<div class="tab-content">
+				<div id="home" class="tab-pane fade in active">
+			<script> 
+function plotwords () {
+ var fill = d3.scale.category20();
+
+  d3.layout.cloud().size([300, 300])
+      .words([
+        "HillaryClinton", "Democratic", "Election", "Obama", "Strong", "Policy", "Help","American"].map(function(d) {
+        return {text: d, size: 10 + Math.random() * 50};
+      }))
+      .rotate(function() { return  0; })
+      .font("Impact")
+      .fontSize(function(d) { return d.size; })
+      .on("end", draw)
+      .start();
+
+  function draw(words) {
+    d3.select("#us-chart").append("svg")
+        .attr("width", 500)
+        .attr("height", 490)
+      .append("g")
+        .attr("transform", "translate(150,150)")
+      .selectAll("text")
+        .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
+		
+		
+  }
+  
+
+}
+plotwords ();
+// Initialize slider
+var slider = d3.slider().min(0).max(10).ticks(10).showRange(true).value(6);
+// Render the slider in the div
+d3.select('#slider').call(slider);
+</script> 
+
+<div id="menu1" class="tab-pane fade" onclick=plotwords()>
+</div>
+</div>
+          </div>
+			</div>
+          </div>
+        </div>
+      </div>
+      <!-- Map -->
+
+      
+
+    </div>
+<div class="row">
+<script type="text/javascript">
+function showValue(newValue)
+{
+	document.getElementById("range").innerHTML=newValue;
+}
+</script>
+  Personality<input type="range" min="0" max="10" value="0" step="1" onchange="showValue(this.value)" />
+<span id="range">0</span> <br />
+   Opinion <input type="range" min="0" max="10" value="0" step="1" onchange="showValue(this.value)" />
+   <span id="range">0</span>
+</div>
+  </div>
+
+    <hr>
+  
+  </div>
+
+
+  <script src="./static/lib/js/bootstrap.min.js"></script>
+  <script src="./static/lib/js/crossfilter.js"></script>
+  <script src="./static/lib/js/dc.js"></script>
+  <script src="./static/lib/js/queue.js"></script>
+
+
+  <script src="./static/lib/js/keen.min.js"></script>
+</body>
+</html>

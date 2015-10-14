@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
+  <link rel="stylesheet" href="./static/lib/css/keen-dashboards.css">
+  <link rel="stylesheet" href="./static/lib/css/dc.css">
+  <link rel="stylesheet" href="./static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="d3.slider.css" media="screen" />
+    <script src="./static/lib/js/jquery.min.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="d3.v3.min.js"></script>
+<script src="d3.slider.js"></script>
+<script src="d3.layout.cloud.js"></script>
+  <script src="foundation.min.js"></script>
+  <script src="foundation.slider.js"></script>
+  <!-- Other JS plugins can be included here -->
+
+  <script>
+    $(document).foundation();
+  </script>
+
+<style>
+.link {
+    fill:none;
+    stroke: #DDD;
+    stroke-width:1px;
+}
+</style>
+
+
+</head>
+<body class="application">
+
+ 
+
+  <div class="container-fluid">
+
+<div class="range-slider" data-slider>
+  <span class="range-slider-handle" role="slider" tabindex="0"></span>
+  <span class="range-slider-active-segment"></span>
+  <input type="hidden">
+</div>
+
+  <input type="range" min="0" max="50" value="25" />
+
+</div>
+  <script src="./static/lib/js/bootstrap.min.js"></script>
+</body>
+</html>
